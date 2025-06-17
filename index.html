@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conectar con Google Calendar</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background-color: #f0f0f0; margin: 0; }
+    .container { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
+    h2 { color: #4285F4; margin-bottom: 20px; }
+    button { background-color: #4285F4; color: white; padding: 12px 25px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s; }
+    button:hover { background-color: #357ae8; }
+    #message { margin-top: 20px; font-weight: bold; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Conectar con Google Calendar para Programar Videos</h2>
+    <p>Para que la aplicación pueda programar tus videos como eventos, necesita acceso a tu Google Calendar.</p>
+    <button id="authorizeButton">Autorizar Google Calendar</button>
+    <div id="message"></div>
+  </div>
+
+  <script>
+    // La URL de tu Firebase Function que inicia el flujo de OAuth
+    const authorizeFunctionURL = "https://us-central1-reservas-sala-white.cloudfunctions.net/oauth"; // ESTA FUNCIÓN AÚN NO LA HEMOS CREADO EN FIREBASE
+
+    document.getElementById('authorizeButton').addEventListener('click', function() {
+      window.location.href = authorizeFunctionURL; // Redirigir al usuario a la función OAuth
+    });
+
+    // Este script manejará la respuesta de OAuth después de la redirección
+    window.addEventListener('load', function() {
+      const params = new URLSearchParams(window.location.search);
+      const message = params.get('message');
+      const type = params.get('type');
+
+      const messageDiv = document.getElementById('message');
+      if (message) {
+        messageDiv.textContent = message;
+        messageDiv.className = type === 'success' ? 'success' : 'error';
+      }
+    });
+  </script>
+</body>
+</html>
